@@ -1,5 +1,5 @@
 import { AppRegistry } from 'react-native';
-import App from './App';
-import AlarmScene from './Alarm';
+import GeolocationTracking from './TrackingLocation';
+import Map from './Map';
 
-AppRegistry.registerComponent('AlarmRoute', () => AlarmScene);
+AppRegistry.registerComponent('TravelAlarm', () => Map);

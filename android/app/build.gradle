@@ -98,9 +98,9 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.alarmroute"
+        applicationId "com.travelalarm"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
         ndk {
@@ -137,12 +137,7 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-keep-awake')
-    compile project(':react-native-push-notification')
-    compile ('com.google.android.gms:play-services-gcm:8.1.0') {
-        force = true;
-    }
-    compile project(':react-native-calendar-events')
+    compile project(':react-native-maps')
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
