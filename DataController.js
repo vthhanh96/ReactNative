@@ -26,8 +26,6 @@ export default class Data extends Component{
   {
       AsyncStorage.getAllKeys()
       .then(keys => {
-        console.log(keys.length);
-        console.log(this.state.isLoading);
         this.getAllData(keys);
       });
   }

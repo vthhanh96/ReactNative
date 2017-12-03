@@ -5,4 +5,4 @@ import GeolocationTracking from './TrackingLocation';
 import GPlacesDemo from './SearchPlace';
 import Data from './DataController';
 
-AppRegistry.registerComponent('AlarmRoute', () => Data);
+AppRegistry.registerComponent('AlarmRoute', () => App);

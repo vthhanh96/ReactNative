@@ -10,9 +10,10 @@ import {
   StyleSheet,
   Text,
   View,
-  PushNotification, 
-  Dimensions
-} from 'react-native'; 
+  PushNotification,
+  Dimensions,
+  TouchableHighlight
+} from 'react-native';
 
 var {width, height} = Dimensions.get('window')
 
@@ -36,11 +37,15 @@ export default class App extends Component<{}> {
       markerPosition: {
         latitude: 0,
         longitude: 0
-      }
+      },
+      markerDestination: {
+        latitude: 0,
+        longitude: 0
+      },
     };
   }
 
-  watchId: ?number = null 
+  watchId: ?number = null
 
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
@@ -56,6 +61,7 @@ export default class App extends Component<{}> {
           }
 
           this.setState({initialPosition : initalRegion})
+          this.setState({markerPosition: initalRegion})
           this.setState({markerPosition: initalRegion})
           console.log(this.state.initialPosition)
       },
@@ -93,7 +99,21 @@ export default class App extends Component<{}> {
       <View style ={styles.container}>
         <MapView
           style={styles.map}
-          region={this.state.initialPosition}>
+          region={this.state.initialPosition}
+          onPress={e =>
+            {
+              console.log(e.nativeEvent);
+              this.setState({markerDestination: e.nativeEvent.coordinate})
+            }
+          }
+          >
+
+          <MapView.Marker
+            coordinate={this.state.markerDestination}>
+            <View style={styles.radius}>
+                <View style={styles.destinationMarker}></View>
+            </View>
+          </MapView.Marker>
 
           <MapView.Marker
             coordinate={this.state.markerPosition}>
@@ -101,8 +121,13 @@ export default class App extends Component<{}> {
                 <View style={styles.marker}></View>
             </View>
           </MapView.Marker>
+
         </MapView>
-      </View>
+        <TouchableHighlight style={styles.addButton}
+          underlayColor='#ff7043' onPress={()=>{console.log('pressed')}}>
+          <Text style={{fontSize: 50, color: 'white'}}>+</Text>
+        </TouchableHighlight>
+     </View>
     );
    }
 }
@@ -136,4 +161,33 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: '#007AFF'
   },
+  destinationMarker:{
+    height: 20,
+    width: 20,
+    borderWidth: 3,
+    borderColor: 'white',
+    borderRadius: 20 / 2,
+    overflow: 'hidden',
+    backgroundColor: 'pink'
+  },
+  addButton: {
+    backgroundColor: '#ff5722',
+    borderColor: '#ff5722',
+    borderWidth: 1,
+    height: 50,
+    width: 50,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 20,
+    right:20,
+    shadowColor: "#000000",
+    shadowOpacity: 0.8,
+    shadowRadius: 200,
+    shadowOffset: {
+      height: 1,
+      width: 0
+    }
+  }
 });
