@@ -12,8 +12,13 @@ import {
   View,
   PushNotification,
   Dimensions,
-  TouchableHighlight
+  TouchableHighlight,
+  TouchableOpacity,
+  Button,
 } from 'react-native';
+import RNGooglePlaces from 'react-native-google-places';
+
+import GPlacesDemo from './SearchPlace';
 
 var {width, height} = Dimensions.get('window')
 
@@ -42,6 +47,11 @@ export default class App extends Component<{}> {
         latitude: 0,
         longitude: 0
       },
+      makerSearch: {
+        latitude: 0,
+        longitude: 0
+      },
+      isGotPossition: false,
     };
   }
 
@@ -60,10 +70,14 @@ export default class App extends Component<{}> {
             longitudeDelta: LONGITUDE_DELTA
           }
 
-          this.setState({initialPosition : initalRegion})
-          this.setState({markerPosition: initalRegion})
-          this.setState({markerPosition: initalRegion})
-          console.log(this.state.initialPosition)
+          if(!this.state.isGotPossition){
+          	this.setState({initialPosition : initalRegion})
+	          this.setState({markerPosition: initalRegion})
+	          this.setState({markerPosition: initalRegion})
+	          this.setState({isGotPossition: true})
+	          console.log(this.state.initialPosition)
+          }
+          
       },
       (error) => console.log(error.message),
       { enableHighAccuracy: Platform.OS != 'android', timeout: 2000 },
@@ -81,9 +95,12 @@ export default class App extends Component<{}> {
           longitudeDelta: LONGITUDE_DELTA
         }
 
-        this.setState({initialPosition : lastRegion})
-        this.setState({markerPosition: lastRegion})
-        console.log(this.state.initialPosition)
+        if(!this.state.isGotPossition){
+			this.setState({initialPosition : lastRegion})
+	        this.setState({markerPosition: lastRegion})
+	        this.setState({isGotPossition: true})
+	        console.log(this.state.initialPosition)
+        }
       },
       (error) => console.log(error.message),
       {enableHighAccuracy: Platform.OS != 'android', timeout: 2000, distanceFilter: 1},
@@ -94,18 +111,51 @@ export default class App extends Component<{}> {
     navigator.geolocation.clearWatch(this.watchId);
   }
 
+  onRegionChange(region) {
+    console.log('onRegionChange')
+  }
+
+  openSearchModal() {
+  		console.log("hihihihihihi");
+		RNGooglePlaces.openAutocompleteModal()
+		.then((place) => {
+			console.log(place);
+			this.setState({searchResult: place});
+			this.setState({makerSearch: {
+						        latitude: place.latitude,
+						        longitude: place.longitude
+					      }});
+			this.setState({initialPosition: {
+						        latitude: place.latitude,
+						        longitude: place.longitude,
+						        latitudeDelta: LATITUDE_DELTA,
+						        longitudeDelta: LONGITUDE_DELTA
+					      }});
+			console.log(this.state.searchResult);
+
+		})
+		.catch(error => console.log(error.message));
+	}
+
+
    render() {
     return (
       <View style ={styles.container}>
+
         <MapView
           style={styles.map}
           region={this.state.initialPosition}
+          showsMyLocationButton = {true}
           onPress={e =>
             {
               console.log(e.nativeEvent);
               this.setState({markerDestination: e.nativeEvent.coordinate})
             }
           }
+          onRegionChange={(e) => {
+              console.log("onRegionChange");
+              this.setState({initialPosition: e});
+            }}
           >
 
           <MapView.Marker
@@ -116,6 +166,10 @@ export default class App extends Component<{}> {
           </MapView.Marker>
 
           <MapView.Marker
+            coordinate={this.state.makerSearch}>
+          </MapView.Marker>
+
+          <MapView.Marker
             coordinate={this.state.markerPosition}>
             <View style={styles.radius}>
                 <View style={styles.marker}></View>
@@ -123,6 +177,15 @@ export default class App extends Component<{}> {
           </MapView.Marker>
 
         </MapView>
+        
+        <View style={styles.searchBar}>
+			<TouchableOpacity
+				style={styles.searchBtn}
+				onPress={() => this.openSearchModal()}>
+				<Text style = {{alignSelf: 'center', paddingLeft: 10}}>Thử nhà hàng, trạm xăng...</Text>
+			</TouchableOpacity>
+		</View>
+
         <TouchableHighlight style={styles.addButton}
           underlayColor='#ff7043' onPress={()=>{console.log('pressed')}}>
           <Text style={{fontSize: 50, color: 'white'}}>+</Text>
@@ -189,5 +252,29 @@ const styles = StyleSheet.create({
       height: 1,
       width: 0
     }
+  },
+  searchBar:{
+  	flexDirection: 'row',
+    backgroundColor: 'transparent',
+    alignSelf: 'flex-start',
+    position: 'absolute',
+	right: 0,
+	top: 0,
+	paddingTop: 5,
+	paddingLeft: 10,
+	paddingRight: 10,
+  },
+  searchBtn:{
+  	flexDirection: 'row',
+  	flex: 1,
+    backgroundColor: 'white',
+    height: 50,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 5,
+    shadowOpacity: 1.0,
   }
 });
