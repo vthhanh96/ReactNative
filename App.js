@@ -121,7 +121,7 @@ export default class App extends Component<{}> {
 		.then((place) => {
 			console.log(place);
 			this.setState({searchResult: place});
-			this.setState({makerSearch: {
+			this.setState({markerDestination: {
 						        latitude: place.latitude,
 						        longitude: place.longitude
 					      }});
@@ -160,13 +160,6 @@ export default class App extends Component<{}> {
 
           <MapView.Marker
             coordinate={this.state.markerDestination}>
-            <View style={styles.radius}>
-                <View style={styles.destinationMarker}></View>
-            </View>
-          </MapView.Marker>
-
-          <MapView.Marker
-            coordinate={this.state.makerSearch}>
           </MapView.Marker>
 
           <MapView.Marker
