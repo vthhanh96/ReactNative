@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, Button} from 'react-native';
+import {Text, View, Button, StatusBar} from 'react-native';
 import {StackNavigator} from 'react-navigation';
 
 class SetAlarm extends Component {

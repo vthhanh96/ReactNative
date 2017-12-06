@@ -53,6 +53,17 @@ export default class Map extends Component<{}> {
     };
   }
 
+  static navigationOptions = {
+    title: 'Map',
+    drawerIcon: ({tintColor}) => (
+      <Image
+      source={require('./ic_map.png')}
+      style={{width: 24, height: 24, tintColor: tintColor}}/>
+    ),
+    header: 
+      <View></View>
+  };
+
   watchId: ?number = null
 
   componentDidMount() {
@@ -132,12 +143,6 @@ export default class Map extends Component<{}> {
     .catch(error => console.log(error.message));
   }
 
-  static navigationOptions = {
-    title: 'Map',
-    header: 
-    <View></View>
-  };
-
   render() {
     const {navigate} = this.props.navigation;
     return (
@@ -171,7 +176,7 @@ export default class Map extends Component<{}> {
       </MapView>
 
       <View style={styles.searchBar}>
-        <TouchableOpacity onPress = {()=> console.log('menu clicked')}>
+        <TouchableOpacity onPress = {()=> navigate('DrawerOpen')}>
           <Image source={require('./menu.png')} style={{margin: 15, width: 20, height: 20}} />
         </TouchableOpacity>
 
