@@ -50,6 +50,16 @@ export default class Data extends Component{
     );
   }
 
+  setData(keyAlarm, alarmObj)
+  {
+    AsyncStorage.setItem(keyAlarm, JSON.stringify(alarmObj));
+  }
+
+  updateData(keyAlarm, alarmObj)
+  {
+    AsyncStorage.mergeItem(keyAlarm, JSON.stringify(alarmObj));
+  }
+
   render()
   {
     return(
