@@ -18,6 +18,13 @@ export default class Data extends Component{
   }
 
   callBackTest = () => {
+    console.log("duocr ahihi");
+    for(var i = 0; i < this.state.alarmList.length; i++)
+      console.log(this.state.alarmList[i]);
+  }
+
+  static TestFunction()
+  {
     for(var i = 0; i < this.state.alarmList.length; i++)
       console.log(this.state.alarmList[i]);
   }
