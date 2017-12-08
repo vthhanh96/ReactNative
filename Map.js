@@ -183,17 +183,24 @@ export default class Map extends Component<{}> {
         <TouchableOpacity
           style={styles.searchBtn}
           onPress={() => this.openSearchModal()}>
-          <Text style = {{alignSelf: 'center', paddingLeft: 10}}>Thử nhà hàng, trạm xăng...</Text>
+          <Text style = {{alignSelf: 'center', paddingLeft: 10}}>Tìm kiếm địa điểm...</Text>
         </TouchableOpacity>
       </View>
 
-      <TouchableHighlight style={styles.addButton}
+      <TouchableHighlight style={[styles.button, {bottom:20}]}
         underlayColor='#ff7043' 
         onPress={() => navigate('SetAlarm', {
           latitude: this.state.markerDestination.latitude,
           longitude: this.state.markerDestination.longitude})}>
-        <Text style={{fontSize: 50, color: 'white'}}>+</Text>
+        <Image source={require('./addBtn.png')} style={styles.imgBtn} />
       </TouchableHighlight>
+
+      <TouchableOpacity style={[styles.button, {bottom:80}]} 
+          onPress={()=>{
+            this.setState({initialPosition: this.state.markerCurrentPosition})
+          }}>
+          <Image source={require('./locationBtn.png')} style={styles.imgBtn} />
+      </TouchableOpacity>
     </View>
       );
     }
@@ -280,5 +287,27 @@ export default class Map extends Component<{}> {
     },
     shadowRadius: 5,
     shadowOpacity: 1.0,
+  },
+  button: {
+    height: 50,
+    width: 50,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 20,
+    right:20,
+    shadowColor: "#000000",
+    shadowOpacity: 0.8,
+    shadowRadius: 200,
+    shadowOffset: {
+      height: 1,
+      width: 0
+    }
+  },
+  imgBtn: {
+    height: 50,
+    width: 50,
+    borderRadius: 50,
   }
 });
