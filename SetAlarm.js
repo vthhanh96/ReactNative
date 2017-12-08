@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import {Text, Image, View, StyleSheet, Button, StatusBar, TextInput, TouchableOpacity, AsyncStorage, Slider} from 'react-native';
 import {StackNavigator} from 'react-navigation';
-import Data from './DataController';
+import ListAlarm from './ListAlarm';
 
 class SetAlarm extends Component {
-
 	constructor(props) {
 		super(props);
 		const {params} = this.props.navigation.state;
@@ -34,41 +33,29 @@ class SetAlarm extends Component {
 	      <View></View>
 	};
 
-	addAlarm = (name) => {
+	addAlarm = () => {
 		var tempAlarm = {
-			alarmnam: name,
+			alarmnam: this.state.name,
 			latitude: this.state.alarm.latitude,
 			longitude: this.state.alarm.longitude,
-			minDisToAlarm: 100
+			minDisToAlarm: this.state.min
 		}
+
 		var tempList = this.state.alarmList;
 		tempList.push(tempAlarm);
 		this.setState({alarmList: tempList});
 		this.setData(this.state.alarmList.length - 1 + "", tempAlarm);
-
   }
-
-	logAllAlarm = () =>
-	{
-		AsyncStorage.getAllKeys()
-		.then(keys => {
-			console.log(keys);
-		});
-	}
-
-
-	getVal(val){
-
-	}
 
 	render() {
 
 		return(
+
 			<View style={{flex: 1, position: "relative"}}>
 				<View style={styles.statusBar}>
 					<Text style = {{paddingLeft: 20,alignSelf: 'center', flex: 1, fontSize: 20, color: 'white'}}>Thêm báo thức</Text>
 			        <TouchableOpacity
-			          style={styles.saveBtn} onPress={()=>{console.log(this.state.name)}}>
+			          style={styles.saveBtn} onPress={this.addAlarm}>
 			          <Text style = {{alignSelf: 'center', paddingLeft: 10, fontSize: 20, color: 'white'}}>Lưu</Text>
 			        </TouchableOpacity>
 			    </View>
@@ -83,17 +70,17 @@ class SetAlarm extends Component {
         				value={this.state.name}
 					 	/>
 				</View>
-				
+
 				<View style={styles.propertiseBox}>
 					<Text style = {styles.propertiseTitle}>Địa chỉ</Text>
 					<Text style = {{paddingLeft: 25}}>kí túc xóa á á a</Text>
 				</View>
-				
+
 				<View style={styles.propertiseBox}>
 					<Text style = {styles.propertiseTitle}>Khoảng cách hiện tại</Text>
 					<Text style = {{paddingLeft: 25}}>1000m</Text>
 				</View>
-				
+
 				<View style={styles.propertiseBox}>
 					<Text style = {styles.propertiseTitle}>Khoảng cách báo thức</Text>
 					<Text style = {{paddingLeft: 25}}>{this.state.min + "m"}</Text>
@@ -113,56 +100,40 @@ class SetAlarm extends Component {
 			        <Text style = {styles.propertiseTitle}>Nhạc chuông báo thức</Text>
 					<Text style = {{paddingLeft: 25}}>default</Text>
 				</View>
-				
+
 			</View>
 		)
 	}
 
-			/*<TextInput
-			 	   onChange ={(name) =>  {}}
-			 />
-			 <TextInput
-			 	value = {"latitude " + this.state.alarm.latitude}/>
-			 <TextInput
-			 	value = {"longitude " + this.state.alarm.longitude}/>
-			 <TextInput/>
-			 <TouchableOpacity
-			 	style = {{width : 100, height : 25, backgroundColor : "blue"}}
-				onPress = {() => this.addAlarm("tempName")}
-			 />
-			 <TouchableOpacity
-			 	style = {{width : 100, height : 25, backgroundColor : "pink"}}
-				onPress = {this.logAllAlarm}
-			 />*/
 
-  loadAllAlarm()
-  {
-      AsyncStorage.getAllKeys()
-      .then(keys => {
-        this.getAllData(keys);
-      });
-  }
+	  loadAllAlarm()
+	  {
+	      AsyncStorage.getAllKeys()
+	      .then(keys => {
+	        this.getAllData(keys);
+	      });
+	  }
 
-  getAllData(keyArray)
-  {
-    var tempList = new Array();
-    AsyncStorage.multiGet(keyArray).then(
-      value => {
-        for(var i = 0; i < value.length; i++)
-        {
-          AsyncStorage.getItem(keyArray[i])
-          .then(itemValue => {
-            const objValue = JSON.parse(itemValue);
-            tempList.push(objValue);
-            this.setState({
-              alarmList: tempList
-            })
-          });
-        }
-				this.setState({numList: value.length});
-      }
-    );
-  }
+	  getAllData(keyArray)
+	  {
+	    var tempList = new Array();
+	    AsyncStorage.multiGet(keyArray).then(
+	      value => {
+	        for(var i = 0; i < value.length; i++)
+	        {
+	          AsyncStorage.getItem(keyArray[i])
+	          .then(itemValue => {
+	            const objValue = JSON.parse(itemValue);
+	            tempList.push(objValue);
+	            this.setState({
+	              alarmList: tempList
+	            })
+	          });
+	        }
+					this.setState({numList: value.length});
+	      }
+	    );
+	  }
 
   setData(keyAlarm, alarmObj)
   {
@@ -226,12 +197,12 @@ const styles = StyleSheet.create({
 
   },
   propertiseTitle: {
-  	marginBottom: 10, 
-  	color: "black", 
-  	fontWeight: 'bold', 
-  	padding: 10, 
-  	backgroundColor: "#D7D7D7", 
-  	paddingLeft: 20 
+  	marginBottom: 10,
+  	color: "black",
+  	fontWeight: 'bold',
+  	padding: 10,
+  	backgroundColor: "#D7D7D7",
+  	paddingLeft: 20
   }
 });
 
