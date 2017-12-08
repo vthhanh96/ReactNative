@@ -19,7 +19,7 @@ class SetAlarm extends Component {
 
 			},
 			min: 100,
-			name: "hi"
+			name: "Báo thức 1"
 		}
 	}
 
@@ -64,9 +64,18 @@ class SetAlarm extends Component {
 	render() {
 
 		return(
-			<View style={{paddingTop: 100, flex: 1}}>
-				<View style={{paddingBottom: 10}}>
-					<Text style = {{marginBottom: 10, color: "black", fontWeight: 'bold', padding: 10, backgroundColor: "#D7D7D7", paddingLeft: 20 }}>Tên báo thức</Text>
+			<View style={{flex: 1, position: "relative"}}>
+				<View style={styles.statusBar}>
+					<Text style = {{paddingLeft: 20,alignSelf: 'center', flex: 1, fontSize: 20, color: 'white'}}>Thêm báo thức</Text>
+			        <TouchableOpacity
+			          style={styles.saveBtn} onPress={()=>{console.log(this.state.name)}}>
+			          <Text style = {{alignSelf: 'center', paddingLeft: 10, fontSize: 20, color: 'white'}}>Lưu</Text>
+			        </TouchableOpacity>
+			    </View>
+
+			    <View style = {{height: 50}}></View>
+				<View style={styles.propertiseBox}>
+					<Text style = {styles.propertiseTitle}>Tên báo thức</Text>
 					<TextInput
 						style = {{marginLeft: 25, padding: 0}}
 						underlineColorAndroid='transparent'
@@ -75,24 +84,24 @@ class SetAlarm extends Component {
 					 	/>
 				</View>
 				
-				<View style={{paddingBottom: 10}}>
-					<Text style = {{marginBottom: 10, color: "black", fontWeight: 'bold', padding: 10, backgroundColor: "#D7D7D7", paddingLeft: 20 }}>Địa chỉ</Text>
+				<View style={styles.propertiseBox}>
+					<Text style = {styles.propertiseTitle}>Địa chỉ</Text>
 					<Text style = {{paddingLeft: 25}}>kí túc xóa á á a</Text>
 				</View>
 				
-				<View style={{paddingBottom: 10}}>
-					<Text style = {{marginBottom: 10, color: "black", fontWeight: 'bold', padding: 10, backgroundColor: "#D7D7D7", paddingLeft: 20 }}>Khoảng cách hiện tại</Text>
+				<View style={styles.propertiseBox}>
+					<Text style = {styles.propertiseTitle}>Khoảng cách hiện tại</Text>
 					<Text style = {{paddingLeft: 25}}>1000m</Text>
 				</View>
 				
-				<View style={{paddingBottom: 10}}>
-					<Text style = {{marginBottom: 10, color: "black", fontWeight: 'bold', padding: 10, backgroundColor: "#D7D7D7", paddingLeft: 20 }}>Khoảng cách báo thức</Text>
+				<View style={styles.propertiseBox}>
+					<Text style = {styles.propertiseTitle}>Khoảng cách báo thức</Text>
 					<Text style = {{paddingLeft: 25}}>{this.state.min + "m"}</Text>
 					<Slider
 				         style={{ width: 320, marginLeft: 20}}
 				         step={1}
-				         thumbTintColor = {"#19c029"}
-				         minimumTrackTintColor = {"#19c029"}
+				         thumbTintColor = {"#ff5722"}
+				         minimumTrackTintColor = {"#ff5722"}
 				         minimumValue={100}
 				         maximumValue={1000}
 				         value={this.state.min}
@@ -100,14 +109,10 @@ class SetAlarm extends Component {
 			        />
 				</View>
 
-		        <View style={{paddingBottom: 10}}>
-			        <Text style = {{marginBottom: 10, color: "black", fontWeight: 'bold', padding: 10, backgroundColor: "#D7D7D7", paddingLeft: 20 }}>Nhạc chuông báo thức</Text>
+		        <View style={styles.propertiseBox}>
+			        <Text style = {styles.propertiseTitle}>Nhạc chuông báo thức</Text>
 					<Text style = {{paddingLeft: 25}}>default</Text>
 				</View>
-
-			    <TouchableOpacity style={[styles.button, {bottom:20}]} onPress={()=>{console.log(this.state.name)}}>
-		        	<Image source={require('./doneBtn.png')} style={styles.imgBtn} />
-		    	</TouchableOpacity>
 				
 			</View>
 		)
@@ -192,6 +197,41 @@ const styles = StyleSheet.create({
   	height: 50,
     width: 50,
     borderRadius: 50,
+  },
+  statusBar:{
+     flexDirection: 'row',
+     backgroundColor: "#ff5722",
+     alignSelf: 'flex-start',
+     position: 'absolute',
+     right: 0,
+     top: 0,
+   },
+   saveBtn:{
+     flexDirection: 'row',
+     width: 70,
+     backgroundColor: 'transparent',
+     height: 50,
+     shadowColor: '#000000',
+     shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 5,
+    shadowOpacity: 1.0,
+  },
+  propertiseBox: {
+  	paddingBottom: 10
+  },
+  propertiseText: {
+
+  },
+  propertiseTitle: {
+  	marginBottom: 10, 
+  	color: "black", 
+  	fontWeight: 'bold', 
+  	padding: 10, 
+  	backgroundColor: "#D7D7D7", 
+  	paddingLeft: 20 
   }
 });
 
