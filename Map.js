@@ -83,7 +83,6 @@ export default class Map extends Component<{}> {
         if(!this.state.isGotPossition){
          this.setState({initialPosition : initalRegion})
          this.setState({isGotPossition: true})
-         console.log(this.state.initialPosition)
        }
 
      },
@@ -107,7 +106,6 @@ export default class Map extends Component<{}> {
         if(!this.state.isGotPossition){
           this.setState({initialPosition : lastRegion})
           this.setState({isGotPossition: true})
-          console.log(this.state.initialPosition)
         }
       },
       (error) => console.log(error.message),
@@ -117,10 +115,6 @@ export default class Map extends Component<{}> {
 
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchId);
-  }
-
-  onRegionChange(region) {
-    console.log('onRegionChange')
   }
 
   openSearchModal = () => {
@@ -159,7 +153,6 @@ export default class Map extends Component<{}> {
           }
         }
         onRegionChange={(e) => {
-          console.log("onRegionChange");
           this.setState({initialPosition: e});
         }}>
 

@@ -5,10 +5,11 @@ import Map from './Map';
 import ListAlarm from './ListAlarm';
 import SetAlarm from './SetAlarm';
 import MapStack from './MapStack';
+import ListAlarmStack from './ListAlarmStack';
 
 const TravelAlarmDrawer = DrawerNavigator({
   MapStack: {screen: MapStack},
-  ListAlarm: {screen: ListAlarm},
+  ListAlarmStack: {screen: ListAlarmStack},
   }
 );
 

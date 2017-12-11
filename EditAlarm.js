@@ -1,70 +1,51 @@
 import React, {Component} from 'react';
 import {Text, Image, View, StyleSheet, Button, StatusBar, TextInput, TouchableOpacity, AsyncStorage, Slider} from 'react-native';
 import {StackNavigator} from 'react-navigation';
-import ListAlarm from './ListAlarm';
 
-class SetAlarm extends Component {
+class EditAlarm extends Component {
 	constructor(props) {
 		super(props);
 		const {params} = this.props.navigation.state;
 		this.state = {
-			lastedKey: -1,
-			numList: 0,
-			alarmList: [],
 			alarm: {
-				key: "",
-				alarmName: "",
-				latitude: params.latitude,
-				longitude: params.longitude,
-				minDisToAlarm: 100,
-
+				key: params.alarm.key,
+				alarmname: params.alarm.alarmname,
+				latitude: params.alarm.latitude,
+				longitude: params.alarm.longitude,
+				minDisToAlarm: params.alarm.minDisToAlarm,
 			},
-			min: 100,
-			name: "Báo thức 1"
+			min: params.alarm.minDisToAlarm,
+			name: params.alarm.alarmname,
 		}
 	}
 
-	componentDidMount()
-	{
-		this.loadAllAlarm();
-	}
-
 	static navigationOptions = {
-	    title: 'Alarm Settings',
-			header:
+	    title: 'Alarm Editting',
+		header:
 	      <View></View>
 	};
 
-	addAlarm = () => {
+	saveAlarm = () => {
 		var tempAlarm = {
-			key: new Date(),
+			key: this.state.alarm.key,
 			alarmname: this.state.name,
 			latitude: this.state.alarm.latitude,
 			longitude: this.state.alarm.longitude,
 			minDisToAlarm: this.state.min
 		}
 
-		var tempList = this.state.alarmList;
-		tempList.push(tempAlarm);
-		this.setState({alarmList: tempList});
-		this.setData(tempAlarm.key, tempAlarm);
-   }
+		this.updateData(tempAlarm.key, tempAlarm);
+    }
 
-   initLastedKey()
-   {
-
-   } 
 
 	render() {
-
 		return(
-
 			<View style={{flex: 1, position: "relative"}}>
 				<View style={styles.statusBar}>
-					<Text style = {{paddingLeft: 20,alignSelf: 'center', flex: 1, fontSize: 20, color: 'white'}}>Thêm báo thức</Text>
+					<Text style = {{paddingLeft: 20,alignSelf: 'center', flex: 1, fontSize: 20, color: 'white'}}>Edit Alarm</Text>
 			        <TouchableOpacity
-			          style={styles.saveBtn} onPress={this.addAlarm}>
-			          <Text style = {{alignSelf: 'center', paddingLeft: 10, fontSize: 20, color: 'white'}}>Lưu</Text>
+			          style={styles.saveBtn} onPress={this.saveAlarm}>
+			          <Text style = {{alignSelf: 'center', paddingLeft: 10, fontSize: 20, color: 'white'}}>Save</Text>
 			        </TouchableOpacity>
 			    </View>
 
@@ -112,41 +93,6 @@ class SetAlarm extends Component {
 			</View>
 		)
 	}
-
-
-	  loadAllAlarm()
-	  {
-	      AsyncStorage.getAllKeys()
-	      .then(keys => {
-	        this.getAllData(keys);
-	      });
-	  }
-
-	  getAllData(keyArray)
-	  {
-	    var tempList = new Array();
-	    AsyncStorage.multiGet(keyArray).then(
-	      value => {
-	        for(var i = 0; i < value.length; i++)
-	        {
-	          AsyncStorage.getItem(keyArray[i])
-	          .then(itemValue => {
-	            const objValue = JSON.parse(itemValue);
-	            tempList.push(objValue);
-	            this.setState({
-	              alarmList: tempList
-	            })
-	          });
-	        }
-					this.setState({numList: value.length});
-	      }
-	    );
-	  }
-
-  setData(keyAlarm, alarmObj)
-  {
-    AsyncStorage.setItem(keyAlarm, JSON.stringify(alarmObj));
-  }
 
   updateData(keyAlarm, alarmObj)
   {
@@ -214,4 +160,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SetAlarm;
+export default EditAlarm;
