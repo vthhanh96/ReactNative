@@ -10,16 +10,17 @@
   StyleSheet,
   Text,
   View,
-  PushNotification,
   Dimensions,
   TouchableHighlight,
   TouchableOpacity,
   Button,
   Image,
+  AsyncStorage,
 } from 'react-native';
 import {StackNavigator} from 'react-navigation';
 import RNGooglePlaces from 'react-native-google-places';
-
+import geolib from 'geolib';
+import PushNotification from 'react-native-push-notification';
 import GPlacesDemo from './SearchPlace';
 
 var {width, height} = Dimensions.get('window')
@@ -50,6 +51,7 @@ export default class Map extends Component<{}> {
         longitude: 0
       },
       isGotPossition: false,
+      alarmList: [],
     };
   }
 
@@ -59,14 +61,23 @@ export default class Map extends Component<{}> {
       <Image
       source={require('./ic_map.png')}
       style={{width: 24, height: 24, tintColor: tintColor}}/>
-    ),
+      ),
     header: 
-      <View></View>
+    <View></View>
   };
 
   watchId: ?number = null
 
   componentDidMount() {
+    ///load alarm
+    this.loadAllAlarm();
+
+     PushNotification.configure({
+      onNotification: function(notification) {
+       console.log( 'NOTIFICATION:', notification );
+     },
+    });
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
         var lat = parseFloat(position.coords.latitude)
@@ -107,6 +118,9 @@ export default class Map extends Component<{}> {
           this.setState({initialPosition : lastRegion})
           this.setState({isGotPossition: true})
         }
+
+        //Check alarm
+        this.checkAlarm();
       },
       (error) => console.log(error.message),
       {enableHighAccuracy: Platform.OS != 'android', timeout: 2000, distanceFilter: 1},
@@ -115,6 +129,68 @@ export default class Map extends Component<{}> {
 
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchId);
+  }
+
+  checkAlarm() {
+    for(var i = 0; i < this.state.alarmList.length; i++) {
+      var alarmPosition = {
+        latitude: this.state.alarmList[i].latitude,
+        longitude: this.state.alarmList[i].longitude,
+      }
+      var distance = geolib.getDistance(this.state.markerCurrentPosition, alarmPosition);
+      console.log("distance(" + i + "): "+ distance);
+      console.log("minDisToAlarm(" + i + "): "+ this.state.alarmList[i].minDisToAlarm)
+
+      //notify if near destination
+      if(distance < this.state.alarmList[i].minDisToAlarm)
+      {
+        console.log("push notification for alarm " + i);
+        this.onAlarm();
+      }
+    }
+  }
+
+
+  onAlarm=()=>
+  {
+    console.log("chich chich chich");
+    {
+      //TODO: schedule background notification
+      PushNotification.localNotificationSchedule({
+        date: new Date(Date.now()), // in 5 secs
+        title: "Day la title", // (optional, for iOS this is only used in apple watch, the title will be the app name on other iOS devices)
+        message: "Day la message", // (required)
+        //playSound: false, // (optional) default: true
+        //soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
+      });
+    }
+  }
+
+  loadAllAlarm()
+  {
+    AsyncStorage.getAllKeys()
+    .then(keys => {
+      this.getAllData(keys);
+    });
+  }
+
+  getAllData(keyArray)
+  {
+    var tempList = new Array();
+    AsyncStorage.multiGet(keyArray).then(
+      value => {
+        for(var i = 0; i < value.length; i++)
+        {
+          AsyncStorage.getItem(keyArray[i])
+          .then(itemValue => {
+            const objValue = JSON.parse(itemValue);
+            tempList.push(objValue);
+            this.setState({
+              alarmList: tempList
+            });
+          });
+        }
+      });
   }
 
   openSearchModal = () => {
@@ -140,61 +216,61 @@ export default class Map extends Component<{}> {
   render() {
     const {navigate} = this.props.navigation;
     return (
-    <View style ={styles.container}>
+      <View style ={styles.container}>
 
       <MapView
-        style={styles.map}
-        region={this.state.initialPosition}
-        showsMyLocationButton = {true}
-        onPress={e =>
-          {
-            console.log(e.nativeEvent);
-            this.setState({markerDestination: e.nativeEvent.coordinate})
-          }
+      style={styles.map}
+      region={this.state.initialPosition}
+      showsMyLocationButton = {true}
+      onPress={e =>
+        {
+          console.log(e.nativeEvent);
+          this.setState({markerDestination: e.nativeEvent.coordinate})
         }
-        onRegionChange={(e) => {
-          this.setState({initialPosition: e});
-        }}>
+      }
+      onRegionChange={(e) => {
+        this.setState({initialPosition: e});
+      }}>
 
-        <MapView.Marker
-          coordinate={this.state.markerDestination}>
-        </MapView.Marker>
+      <MapView.Marker
+      coordinate={this.state.markerDestination}>
+      </MapView.Marker>
 
-        <MapView.Marker
-          coordinate={this.state.markerCurrentPosition}>
-          <View style={styles.radius}>
-          <View style={styles.marker}></View>
-          </View>
-        </MapView.Marker>
+      <MapView.Marker
+      coordinate={this.state.markerCurrentPosition}>
+      <View style={styles.radius}>
+      <View style={styles.marker}></View>
+      </View>
+      </MapView.Marker>
       </MapView>
 
       <View style={styles.searchBar}>
-        <TouchableOpacity onPress = {()=> navigate('DrawerOpen')}>
-          <Image source={require('./menu.png')} style={{margin: 15, width: 20, height: 20}} />
-        </TouchableOpacity>
+      <TouchableOpacity onPress = {()=> navigate('DrawerOpen')}>
+      <Image source={require('./menu.png')} style={{margin: 15, width: 20, height: 20}} />
+      </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.searchBtn}
-          onPress={() => this.openSearchModal()}>
-          <Text style = {{alignSelf: 'center', paddingLeft: 10}}>Tìm kiếm địa điểm...</Text>
-        </TouchableOpacity>
+      <TouchableOpacity
+      style={styles.searchBtn}
+      onPress={() => this.openSearchModal()}>
+      <Text style = {{alignSelf: 'center', paddingLeft: 10}}>Tìm kiếm địa điểm...</Text>
+      </TouchableOpacity>
       </View>
 
       <TouchableHighlight style={[styles.button, {bottom:20}]}
-        underlayColor='#ff7043' 
-        onPress={() => navigate('SetAlarm', {
-          latitude: this.state.markerDestination.latitude,
-          longitude: this.state.markerDestination.longitude})}>
-        <Image source={require('./addBtn.png')} style={styles.imgBtn} />
+      underlayColor='#ff7043' 
+      onPress={() => navigate('SetAlarm', {
+        latitude: this.state.markerDestination.latitude,
+        longitude: this.state.markerDestination.longitude})}>
+      <Image source={require('./addBtn.png')} style={styles.imgBtn} />
       </TouchableHighlight>
 
       <TouchableOpacity style={[styles.button, {bottom:80}]} 
-          onPress={()=>{
-            this.setState({initialPosition: this.state.markerCurrentPosition})
-          }}>
-          <Image source={require('./locationBtn.png')} style={styles.imgBtn} />
+      onPress={()=>{
+        this.setState({initialPosition: this.state.markerCurrentPosition})
+      }}>
+      <Image source={require('./locationBtn.png')} style={styles.imgBtn} />
       </TouchableOpacity>
-    </View>
+      </View>
       );
     }
   }
