@@ -1,5 +1,15 @@
 import React, {Component} from 'react';
-import {Text, View, Image, AsyncStorage, StyleSheet, ListView, TouchableOpacity, Alert} from 'react-native';
+import {
+	Text, 
+	View, 
+	Image, 
+	AsyncStorage, 
+	StyleSheet, 
+	ListView, 
+	TouchableOpacity, 
+	Alert,
+	Switch
+} from 'react-native';
 
 export default class ListAlarm extends Component {
 
@@ -14,6 +24,10 @@ export default class ListAlarm extends Component {
 			numList: 0,
 			alarmList: [],
 			dataSource: ds.cloneWithRows([]),
+
+			//src & SwitchValue phải để trong dataSource để mỗi row có giá trị khác nhau
+			src: require('./src/images/bell.png'),
+			SwitchValue: true
 		}
 	}
 
@@ -23,13 +37,17 @@ export default class ListAlarm extends Component {
 	}
 
 	static navigationOptions = {
-		title: 'List Alarm',
+		title: "List Alarm",
 		drawerIcon: ({tintColor}) => (
 			<Image
-			source={require('./ic_list_alarm.png')}
+			source={require('./src/images/ic_list_alarm.png')}
 			style={{width: 24, height: 24, tintColor: tintColor}}/>
 			),
+		header:
+    		<View></View>
 	}
+
+	//
 
 	confirmDeleteAlarm=(key) => {
 		console.log(key);
@@ -48,38 +66,69 @@ export default class ListAlarm extends Component {
 		AsyncStorage.removeItem(key).then(this.reloadAllAlarm);
 	}
 
+	onSwitchRow(rowData){
+		console.log("change", this.state.SwitchValue);
+		if(this.state.SwitchValue){
+			this.setState({src: require('./src/images/belloff.png')});
+		}
+		else{
+			
+			this.setState({src: require('./src/images/bell.png')});
+		}
+	}
+
 	render() {
 		const {navigate} = this.props.navigation;
 		return(
 			<View style={{flex: 1}}>
-			<ListView style={styles.container}
-			dataSource={this.state.dataSource}
-			enableEmptySections={true}
-			renderRow={(rowData) => {
-				console.log('rowData', rowData);
-				return (
-					<TouchableOpacity 
-					onPress={() => navigate('EditAlarm', {alarm: rowData})}
-					onLongPress={() => this.confirmDeleteAlarm(rowData.key)}>
-					<View style={styles.row}>
-					<View style={{flex: 10, padding: 10}}>
-					<Text>{rowData.alarmname}</Text>
-					</View>
-					<View style={{flex: 1, justifyContent: 'center'}}>
-					<Text>></Text>
-					</View>
-					</View>
-					</TouchableOpacity>
-					)
-			}
-		}
-		renderSeparator={(sectionID, rowID, adjacentRowHighlighted) =>
-			<View key={rowID} style={{height: 1, backgroundColor: 'lightgray'}}/>
-		}
-		/>
-		</View>
+				<View style={styles.statusBar}>
+					<TouchableOpacity onPress = {()=> navigate('DrawerOpen')}>
+				    	<Image source={require('./src/images/menu_white.png')} style={{margin: 15, width: 20, height: 20}} />
+				    </TouchableOpacity>
+					<Text style = {{paddingLeft: 50, flex: 1, fontSize: 20, color: 'white', alignSelf: "center",  }}>Danh sách báo thức</Text>
+			        <TouchableOpacity
+			          style={styles.saveBtn} onPress={this.addAlarm}>
+			          <Text style = {{alignSelf: 'center', paddingLeft: 10, fontSize: 20, color: 'white'}}></Text>
+			        </TouchableOpacity>
+			    </View>
+				<ListView style={styles.container}
+					dataSource={this.state.dataSource}
+					enableEmptySections={true}
+					renderRow={(rowData) => {
+						console.log('rowData', rowData);
+						return (
+						<TouchableOpacity
+						onPress={() => navigate('EditAlarm', {alarm: rowData})}
+						onLongPress={() => this.confirmDeleteAlarm(rowData.key)}>
+							<View style={styles.row}>
+								<Image source={this.state.src} style={{margin: 10, width: 30, height: 25, alignItems: 'center', justifyContent: 'center'}} />
+								<View style={{flex: 10, padding: 5, flexDirection: "column"}}>
+									<Text style={{fontSize: 17, fontWeight: 'bold'}}>{rowData.alarmname}</Text>
+									<Text>Khoảng cách hiện tại: 100m</Text>
+								</View>
+								<Switch 
+							      onValueChange={(value) => {
+							      	console.log(this.state.SwitchValue)
+							      	this.setState({SwitchValue: value})
+							      	console.log(this.state.SwitchValue)
+							      	this.onSwitchRow("")
+							      }}
+							      value={this.state.SwitchValue}
+							      thumbTintColor = {"#e23600"}
+							      onTintColor = {"#ffaf96"} />
+							</View>
+						</TouchableOpacity>
+						)
+					}}
+					renderSeparator={(sectionID, rowID, adjacentRowHighlighted) =>
+						<View key={rowID} style={{height: 1, backgroundColor: 'lightgray'}}/>
+					}
+				/>
+			</View>
 		)
 	}
+
+	//
 
 	reloadAllAlarm = () =>{
 		console.log("Xoa key, reload list alarm");
@@ -142,6 +191,21 @@ const styles = StyleSheet.create({
 	},
 	row: {
 		flexDirection: 'row',
-		height: 100
+		flex: 1,
+		justifyContent: 'center',
+        alignItems: 'center',
 	},
+	statusBar:{
+     flexDirection: 'row',
+     backgroundColor: "#ff5722",
+     alignSelf: 'flex-start',
+     position: 'absolute',
+     right: 0,
+     top: 0,
+   },
+   saveBtn:{
+     flexDirection: 'row',
+     backgroundColor: 'transparent',
+     height: 50,
+    }
 });

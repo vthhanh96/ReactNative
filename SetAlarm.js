@@ -61,7 +61,10 @@ class SetAlarm extends Component {
 
 			<View style={{flex: 1, position: "relative"}}>
 				<View style={styles.statusBar}>
-					<Text style = {{paddingLeft: 20,alignSelf: 'center', flex: 1, fontSize: 20, color: 'white'}}>Thêm báo thức</Text>
+					<TouchableOpacity onPress = {()=> console.log("pressed")}>
+				    	<Image source={require('./src/images/menu_white.png')} style={{margin: 15, width: 20, height: 20}} />
+				    </TouchableOpacity>
+					<Text style = {{paddingLeft: 50,alignSelf: 'center', flex: 1, fontSize: 20, color: 'white'}}>Thêm báo thức</Text>
 			        <TouchableOpacity
 			          style={styles.saveBtn} onPress={this.addAlarm}>
 			          <Text style = {{alignSelf: 'center', paddingLeft: 10, fontSize: 20, color: 'white'}}>Lưu</Text>
@@ -95,8 +98,8 @@ class SetAlarm extends Component {
 					<Slider
 				         style={{ width: 320, marginLeft: 20}}
 				         step={1}
-				         thumbTintColor = {"#ff5722"}
-				         minimumTrackTintColor = {"#ff5722"}
+				         thumbTintColor = {"#e23600"}
+				         minimumTrackTintColor = {"#ffaf96"}
 				         minimumValue={100}
 				         maximumValue={1000}
 				         value={this.state.min}
