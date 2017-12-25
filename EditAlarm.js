@@ -10,9 +10,12 @@ class EditAlarm extends Component {
 			alarm: {
 				key: params.alarm.key,
 				alarmname: params.alarm.alarmname,
+				address: params.alarm.address,
 				latitude: params.alarm.latitude,
 				longitude: params.alarm.longitude,
 				minDisToAlarm: params.alarm.minDisToAlarm,
+				ringtone: params.alarm.ringtone,
+				enable: params.alarm.enable,
 			},
 			min: params.alarm.minDisToAlarm,
 			name: params.alarm.alarmname,
@@ -21,6 +24,7 @@ class EditAlarm extends Component {
 
 	static navigationOptions = {
 	    title: 'Alarm Editting',
+	    tabBarVisible: false,
 		header:
 	      <View></View>
 	};
@@ -29,12 +33,15 @@ class EditAlarm extends Component {
 		var tempAlarm = {
 			key: this.state.alarm.key,
 			alarmname: this.state.name,
+			address: this.state.alarm.address,
 			latitude: this.state.alarm.latitude,
 			longitude: this.state.alarm.longitude,
-			minDisToAlarm: this.state.min
+			minDisToAlarm: this.state.min,
+			ringtone: this.state.alarm.ringtone,
+			enable: this.state.alarm.enable,
 		}
 
-		this.updateData(tempAlarm.key, tempAlarm);
+		this.updateData(tempAlarm.key, tempAlarm).then(this.props.navigation.goBack());
     }
 
 
@@ -62,7 +69,7 @@ class EditAlarm extends Component {
 
 				<View style={styles.propertiseBox}>
 					<Text style = {styles.propertiseTitle}>Địa chỉ</Text>
-					<Text style = {{paddingLeft: 25}}>kí túc xóa á á a</Text>
+					<Text style = {{paddingLeft: 25}}>{this.state.alarm.address}</Text>
 				</View>
 
 				<View style={styles.propertiseBox}>
@@ -94,9 +101,9 @@ class EditAlarm extends Component {
 		)
 	}
 
-  updateData(keyAlarm, alarmObj)
+  async updateData(keyAlarm, alarmObj)
   {
-    AsyncStorage.mergeItem(keyAlarm, JSON.stringify(alarmObj));
+    await AsyncStorage.mergeItem(keyAlarm, JSON.stringify(alarmObj));
   }
 }
 
