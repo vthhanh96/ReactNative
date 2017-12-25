@@ -72,7 +72,7 @@ export default class Map extends Component<{}> {
 
   componentDidMount() {
 
-    ///load alarm
+    //load alarm
     this.loadAllAlarm();
 
     PushNotification.configure({
@@ -130,20 +130,13 @@ export default class Map extends Component<{}> {
   );
   }
 
-  componentDidFocus() {
-    console.log('map focus');
-  }
-  componentDidAppear() {
-    console.log('map appear');
-  }
-
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchId);
-    AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
   checkAlarm() {
     for(var i = 0; i < this.state.alarmList.length; i++) {
+      if(!this.state.alarmList[i].enable) continue;
       var alarmPosition = {
         latitude: this.state.alarmList[i].latitude,
         longitude: this.state.alarmList[i].longitude,
@@ -226,8 +219,20 @@ goToSetAlarmScreen = () => {
   if(latitude === 0 && longitude === 0) {
     ToastAndroid.show('You have to choose a desination.', ToastAndroid.SHORT);
   } else {
-    navigate('SetAlarm', {latitude: latitude, longitude: longitude, name: name, distance: geolib.getDistance(this.state.markerCurrentPosition, this.state.markerDestination)});
+    navigate('SetAlarm', 
+      {
+        latitude: latitude,
+        longitude: longitude, 
+        name: name, 
+        distance: geolib.getDistance(this.state.markerCurrentPosition, this.state.markerDestination),
+        onGoBack: () => this.refresh()
+      });
   }   
+}
+
+refresh = () => {
+  this.loadAllAlarm();
+  console.log('refresh');
 }
 
 render() {

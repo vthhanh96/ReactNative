@@ -14,7 +14,8 @@ const TravelAlarm = TabNavigator({
   ListAlarm: {
     screen: ListAlarmStack,
   },
-}, {
+}, 
+{
   tabBarPosition: 'bottom',
   animationEnabled: true,
   tabBarOptions: {
@@ -27,11 +28,11 @@ const TravelAlarm = TabNavigator({
     showIcon: true,
     upperCaseLabel: false,
     indicatorStyle: {
-        backgroundColor: '#ff5722',
+      backgroundColor: '#ff5722',
     },
     tabStyle: {
-        paddingVertical: 0,
-        height: 50,
+      paddingVertical: 0,
+      height: 50,
     }
   },
 });

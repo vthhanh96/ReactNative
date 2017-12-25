@@ -55,6 +55,7 @@ class SetAlarm extends Component {
 		tempList.push(tempAlarm);
 		this.setState({alarmList: tempList});
 		this.setData(tempAlarm.key, tempAlarm);
+		this.props.navigation.state.params.onGoBack();
 		this.props.navigation.goBack();
 	}
 

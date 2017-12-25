@@ -37,10 +37,6 @@ export default class ListAlarm extends Component {
 		this.loadAllAlarm();
 	}
 
-	componentDidFocus() {
-		console.log('list alarm focus');
-	}
-
 	static navigationOptions = {
 		tabBarLabel: "List Alarm",
 		tabBarIcon: ({ tintColor }) => (
@@ -88,6 +84,9 @@ export default class ListAlarm extends Component {
 		this.updateData(rowData.key, rowData);
 	}
 
+	refresh = () => {
+		this.loadAllAlarm();
+	}
 
 	render() {
 		const {navigate} = this.props.navigation;
@@ -109,7 +108,7 @@ export default class ListAlarm extends Component {
 			renderRow={(rowData) => {
 				return (
 				<TouchableOpacity
-				onPress={() => navigate('EditAlarm', {alarm: rowData})}
+				onPress={() => navigate('EditAlarm', {alarm: rowData, onGoBack: () => this.refresh()})}
 				onLongPress={() => this.confirmDeleteAlarm(rowData.key)}>
 				<View style={styles.row}>
 				{rowData.enable

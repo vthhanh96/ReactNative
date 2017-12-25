@@ -41,7 +41,12 @@ class EditAlarm extends Component {
 			enable: this.state.alarm.enable,
 		}
 
-		this.updateData(tempAlarm.key, tempAlarm).then(this.props.navigation.goBack());
+		this.updateData(tempAlarm.key, tempAlarm).then(this.goBackToListAlarm());
+    }
+
+    goBackToListAlarm = () => {
+    	this.props.navigation.state.params.onGoBack();
+    	this.props.navigation.goBack();
     }
 
 
