@@ -23,6 +23,7 @@ import RNGooglePlaces from 'react-native-google-places';
 import geolib from 'geolib';
 import PushNotification from 'react-native-push-notification';
 import GPlacesDemo from './SearchPlace';
+import getAddress from './getAddress';
 
 var {width, height} = Dimensions.get('window')
 
@@ -235,6 +236,20 @@ refresh = () => {
   console.log('refresh');
 }
 
+onMapClick = (data) => {
+  var latitude = data.coordinate.latitude;
+  var longitude = data.coordinate.longitude;
+  
+  getAddress.getAddress(data.coordinate.latitude, data.coordinate.longitude).then((data) => {
+    if(data === '')
+      data = 'Unknown Location';
+    this.setState({markerDestination: {
+      latitude: latitude,
+      longitude: longitude,
+      name: data}});
+  });
+}
+
 render() {
   const {navigate} = this.props.navigation;
   return (
@@ -244,16 +259,7 @@ render() {
     style={styles.map}
     region={this.state.initialPosition}
     showsMyLocationButton = {true}
-    onPress={e =>
-      {
-        console.log(e.nativeEvent);
-        this.setState({markerDestination: {
-          latitude: e.nativeEvent.coordinate.latitude,
-          longitude: e.nativeEvent.coordinate.longitude,
-          name: 'Unknown location',
-        }});
-      }
-    }
+    onPress={e => this.onMapClick(e.nativeEvent)}
     onRegionChange={(e) => {
       this.setState({initialPosition: e});
     }}>
