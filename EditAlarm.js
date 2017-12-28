@@ -1,5 +1,17 @@
 import React, {Component} from 'react';
-import {Text, Image, View, StyleSheet, Button, StatusBar, TextInput, TouchableOpacity, AsyncStorage, Slider} from 'react-native';
+import {
+	Text, 
+	Image, 
+	View, 
+	StyleSheet, 
+	Button, 
+	StatusBar, 
+	TextInput, 
+	TouchableOpacity, 
+	AsyncStorage, 
+	Slider,
+	Picker
+} from 'react-native';
 import {StackNavigator} from 'react-navigation';
 
 class EditAlarm extends Component {
@@ -54,6 +66,9 @@ class EditAlarm extends Component {
 		return(
 			<View style={{flex: 1, position: "relative"}}>
 				<View style={styles.statusBar}>
+				<TouchableOpacity onPress = {()=> console.log("pressed")}>
+					<Image source={require('./src/images/back_icon.png')} style={{margin: 15, width: 20, height: 20}} />
+				</TouchableOpacity>
 					<Text style = {{paddingLeft: 20,alignSelf: 'center', flex: 1, fontSize: 20, color: 'white'}}>Edit Alarm</Text>
 			        <TouchableOpacity
 			          style={styles.saveBtn} onPress={this.saveAlarm}>
@@ -63,7 +78,7 @@ class EditAlarm extends Component {
 
 			    <View style = {{height: 50}}></View>
 				<View style={styles.propertiseBox}>
-					<Text style = {styles.propertiseTitle}>Tên báo thức</Text>
+			<Text style = {styles.propertiseTitle}>Alarm name</Text>
 					<TextInput
 						style = {{marginLeft: 25, padding: 0}}
 						underlineColorAndroid='transparent'
@@ -73,17 +88,17 @@ class EditAlarm extends Component {
 				</View>
 
 				<View style={styles.propertiseBox}>
-					<Text style = {styles.propertiseTitle}>Địa chỉ</Text>
+			<Text style = {styles.propertiseTitle}>Destination</Text>
 					<Text style = {{paddingLeft: 25}}>{this.state.alarm.address}</Text>
 				</View>
 
 				<View style={styles.propertiseBox}>
-					<Text style = {styles.propertiseTitle}>Khoảng cách hiện tại</Text>
+			<Text style = {styles.propertiseTitle}>Distance</Text>
 					<Text style = {{paddingLeft: 25}}>1000m</Text>
 				</View>
 
 				<View style={styles.propertiseBox}>
-					<Text style = {styles.propertiseTitle}>Khoảng cách báo thức</Text>
+					<Text style = {styles.propertiseTitle}>Min Distance</Text>
 					<Text style = {{paddingLeft: 25}}>{this.state.min + "m"}</Text>
 					<Slider
 				         style={{ width: 320, marginLeft: 20}}
@@ -98,9 +113,16 @@ class EditAlarm extends Component {
 				</View>
 
 		        <View style={styles.propertiseBox}>
-			        <Text style = {styles.propertiseTitle}>Nhạc chuông báo thức</Text>
-					<Text style = {{paddingLeft: 25}}>default</Text>
-				</View>
+			<Text style = {styles.propertiseTitle}>Ringtone</Text>
+				<Picker style = {styles.picker}
+				  selectedValue={this.state.ringtone}
+				  onValueChange={(itemValue, itemIndex) => this.setState({ringtone: itemValue})}>
+				  <Picker.Item label="Oop oop" value="oop.mp3" />
+				  <Picker.Item label="Hello" value="hello_ringtone.mp3" />
+				  <Picker.Item label="In My Heart" value="in_my_heart.mp3" />
+				  <Picker.Item label="Sweet Ringtone" value="sweet.mp3" />
+				</Picker>
+			</View>
 
 			</View>
 		)
@@ -113,35 +135,40 @@ class EditAlarm extends Component {
 }
 
 const styles = StyleSheet.create({
-  button: {
-    height: 50,
-    width: 50,
-    borderRadius: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    bottom: 20,
-    right:20,
-    shadowColor: "#000000",
-    shadowOpacity: 0.8,
-    shadowRadius: 200,
-    shadowOffset: {
-      height: 1,
-      width: 0
+  	button: {
+	    height: 50,
+	    width: 50,
+	    borderRadius: 50,
+	    alignItems: 'center',
+	    justifyContent: 'center',
+	    position: 'absolute',
+	    bottom: 20,
+	    right:20,
+	    shadowColor: "#000000",
+	    shadowOpacity: 0.8,
+	    shadowRadius: 200,
+	    shadowOffset: {
+	      height: 1,
+	      width: 0
     }
-  },
-  imgBtn: {
-  	height: 50,
-    width: 50,
-    borderRadius: 50,
-  },
-  statusBar:{
-     flexDirection: 'row',
-     backgroundColor: "#ff5722",
-     alignSelf: 'flex-start',
-     position: 'absolute',
-     right: 0,
-     top: 0,
+  	},
+  	imgBtn: {
+	  	height: 50,
+	    width: 50,
+	    borderRadius: 50,
+  	},
+  	picker: {
+		height: 20,
+		marginLeft: 20,
+		opacity: 0.6,
+	},
+  	statusBar:{
+	     flexDirection: 'row',
+	     backgroundColor: "#ff5722",
+	     alignSelf: 'flex-start',
+	     position: 'absolute',
+	     right: 0,
+	     top: 0,
    },
    saveBtn:{
      flexDirection: 'row',

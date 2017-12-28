@@ -163,7 +163,7 @@ onAlarm=()=> {
       date: new Date(Date.now()),
       title: "Báo thức 1", // (optional, for iOS this is only used in apple watch, the title will be the app name on other iOS devices)
       message: "Đã đến nơi ahiahi", // (required)
-      soundName: 'ringtone.mp3', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
+      soundName: 'in_my_heart.mp3', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
     });
   }
 }
@@ -277,14 +277,12 @@ render() {
     </MapView>
 
     <View style={styles.searchBar}>
-    <TouchableOpacity onPress = {()=> navigate('DrawerOpen')}>
-    <Image source={require('./src/images/menu.png')} style={{margin: 15, width: 20, height: 20}} />
-    </TouchableOpacity>
+    
 
     <TouchableOpacity
     style={styles.searchBtn}
     onPress={() => this.openSearchModal()}>
-    <Text style = {{alignSelf: 'center', paddingLeft: 10}}>Tìm kiếm địa điểm...</Text>
+    <Text style = {{alignSelf: 'center', paddingLeft: 10}}>Search some where...</Text>
     </TouchableOpacity>
     </View>
 

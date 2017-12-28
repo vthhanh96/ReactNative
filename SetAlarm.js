@@ -1,5 +1,17 @@
 import React, {Component} from 'react';
-import {Text, Image, View, StyleSheet, Button, StatusBar, TextInput, TouchableOpacity, AsyncStorage, Slider} from 'react-native';
+import {
+	Text, 
+	Image, 
+	View, 
+	StyleSheet, 
+	Button, 
+	StatusBar, 
+	TextInput, 
+	TouchableOpacity, 
+	AsyncStorage, 
+	Slider,
+	Picker
+} from 'react-native';
 import {StackNavigator} from 'react-navigation';
 import ListAlarm from './ListAlarm';
 
@@ -24,6 +36,7 @@ class SetAlarm extends Component {
 			min: 100,
 			name: "Báo thức 1",
 			distance: params.distance,
+			ringtone: "hello_ringtone.mp3",
 		}
 	}
 
@@ -47,7 +60,7 @@ class SetAlarm extends Component {
 			latitude: this.state.alarm.latitude,
 			longitude: this.state.alarm.longitude,
 			minDisToAlarm: this.state.min,
-			ringtone: this.state.alarm.ringtone,
+			ringtone: this.state.ringtone,
 			enable: this.state.alarm.enable,
 		}
 
@@ -64,62 +77,66 @@ class SetAlarm extends Component {
 		return(
 
 			<View style={{flex: 1, position: "relative"}}>
-			<View style={styles.statusBar}>
-			<TouchableOpacity onPress = {()=> console.log("pressed")}>
-			<Image source={require('./src/images/menu_white.png')} style={{margin: 15, width: 20, height: 20}} />
-			</TouchableOpacity>
-			<Text style = {{paddingLeft: 50,alignSelf: 'center', flex: 1, fontSize: 20, color: 'white'}}>Thêm báo thức</Text>
-			<TouchableOpacity
-			style={styles.saveBtn} onPress={this.addAlarm}>
-			<Text style = {{alignSelf: 'center', paddingLeft: 10, fontSize: 20, color: 'white'}}>Lưu</Text>
-			</TouchableOpacity>
-			</View>
+				<View style={styles.statusBar}>
+					<TouchableOpacity onPress = {()=> console.log("pressed")}>
+						<Image source={require('./src/images/back_icon.png')} style={{margin: 15, width: 20, height: 20}} />
+					</TouchableOpacity>
+					<Text style = {{paddingLeft: 0,alignSelf: 'center', flex: 1, fontSize: 20, color: 'white'}}>Add Alarm</Text>
+					<TouchableOpacity style={styles.saveBtn} onPress={this.addAlarm}>
+						<Text style = {{alignSelf: 'center', paddingLeft: 10, fontSize: 20, color: 'white'}}>Save</Text>
+					</TouchableOpacity>
+				</View>
 
-			<View style = {{height: 50}}></View>
-			<View style={styles.propertiseBox}>
-			<Text style = {styles.propertiseTitle}>Tên báo thức</Text>
-			<TextInput
-			style = {{marginLeft: 25, padding: 0}}
-			underlineColorAndroid='transparent'
-			onChangeText={(tenBaoThuc) => this.setState({name:tenBaoThuc})}
-			value={this.state.name}
-			/>
-			</View>
+				<View style = {{height: 50}}></View>
 
-			<View style={styles.propertiseBox}>
-			<Text style = {styles.propertiseTitle}>Địa chỉ</Text>
-			<Text style = {{paddingLeft: 25}}>{this.state.alarm.address}</Text>
-			</View>
+				<View style={styles.propertiseBox}>
+					<Text style = {styles.propertiseTitle}>Alarm name</Text>
+					<TextInput
+						style = {{marginLeft: 25, padding: 0}}
+						underlineColorAndroid='transparent'
+						onChangeText={(tenBaoThuc) => this.setState({name:tenBaoThuc})}
+						value={this.state.name}/>
+				</View>
 
-			<View style={styles.propertiseBox}>
-			<Text style = {styles.propertiseTitle}>Khoảng cách hiện tại</Text>
-			<Text style = {{paddingLeft: 25}}>{this.state.distance + "m"}</Text>
-			</View>
+				<View style={styles.propertiseBox}>
+					<Text style = {styles.propertiseTitle}>Destination</Text>
+					<Text style = {{paddingLeft: 25}}>{this.state.alarm.address}</Text>
+				</View>
 
-			<View style={styles.propertiseBox}>
-			<Text style = {styles.propertiseTitle}>Khoảng cách báo thức</Text>
-			<Text style = {{paddingLeft: 25}}>{this.state.min + "m"}</Text>
-			<Slider
-			style={{ width: 320, marginLeft: 20}}
-			step={1}
-			thumbTintColor = {"#e23600"}
-			minimumTrackTintColor = {"#ffaf96"}
-			minimumValue={100}
-			maximumValue={1000}
-			value={this.state.min}
-			onValueChange={val => this.setState({ min: val })}
-			/>
-			</View>
+				<View style={styles.propertiseBox}>
+					<Text style = {styles.propertiseTitle}>Distance</Text>
+					<Text style = {{paddingLeft: 25}}>{this.state.distance + "m"}</Text>
+				</View>
 
-			<View style={styles.propertiseBox}>
-			<Text style = {styles.propertiseTitle}>Nhạc chuông báo thức</Text>
-			<Text style = {{paddingLeft: 25}}>default</Text>
-			</View>
+				<View style={styles.propertiseBox}>
+					<Text style = {styles.propertiseTitle}>Min Distance</Text>
+					<Text style = {{paddingLeft: 25}}>{this.state.min + "m"}</Text>
+					<Slider
+						style={{ width: 320, marginLeft: 20}}
+						step={1}
+						thumbTintColor = {"#e23600"}
+						minimumTrackTintColor = {"#ffaf96"}
+						minimumValue={100}
+						maximumValue={1000}
+						value={this.state.min}
+						onValueChange={val => this.setState({ min: val })}/>
+				</View>
 
+				<View style={styles.propertiseBox}>
+					<Text style = {styles.propertiseTitle}>Ringtone</Text>
+					<Picker style = {styles.picker}
+					  selectedValue={this.state.ringtone}
+					  onValueChange={(itemValue, itemIndex) => this.setState({ringtone: itemValue})}>
+					  <Picker.Item label="Oop oop" value="oop.mp3" />
+					  <Picker.Item label="Hello" value="hello_ringtone.mp3" />
+					  <Picker.Item label="In My Heart" value="in_my_heart.mp3" />
+					  <Picker.Item label="Sweet Ringtone" value="sweet.mp3" />
+					</Picker>
+				</View>
 			</View>
 			)
 		}
-
+//
 
 		loadAllAlarm()
 		{
@@ -183,6 +200,11 @@ class SetAlarm extends Component {
 			height: 50,
 			width: 50,
 			borderRadius: 50,
+		},
+		picker: {
+			height: 20,
+			marginLeft: 20,
+			opacity: 0.6,
 		},
 		statusBar:{
 			flexDirection: 'row',

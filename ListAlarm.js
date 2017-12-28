@@ -93,13 +93,10 @@ export default class ListAlarm extends Component {
 		return(
 			<View style={{flex: 1}}>
 			<View style={styles.statusBar}>
-			<TouchableOpacity onPress = {()=> navigate('DrawerOpen')}>
-				<Image source={require('./src/images/menu_white.png')} style={{margin: 15, width: 20, height: 20}} />
-			</TouchableOpacity>
-			<Text style = {{paddingLeft: 50, flex: 1, fontSize: 20, color: 'white', alignSelf: "center",  }}>Danh sách báo thức</Text>
+			<Text style = {{paddingLeft: 15, flex: 1, fontSize: 20, color: 'white', alignSelf: "center",  }}>List Alarm</Text>
 			<TouchableOpacity
 			style={styles.saveBtn} onPress={this.addAlarm}>
-			<Text style = {{alignSelf: 'center', paddingLeft: 10, fontSize: 20, color: 'white'}}></Text>
+			<Image source={require('./src/images/reload.png')} style={{margin: 15, width: 20, height: 20}} />
 			</TouchableOpacity>
 			</View>
 			<ListView style={styles.container}
