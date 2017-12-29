@@ -93,11 +93,11 @@ export default class ListAlarm extends Component {
 		return(
 			<View style={{flex: 1}}>
 			<View style={styles.statusBar}>
-			<Text style = {{paddingLeft: 15, flex: 1, fontSize: 20, color: 'white', alignSelf: "center",  }}>List Alarm</Text>
-			<TouchableOpacity
-			style={styles.saveBtn} onPress={this.addAlarm}>
-			<Image source={require('./src/images/reload.png')} style={{margin: 15, width: 20, height: 20}} />
-			</TouchableOpacity>
+				<Text style = {{paddingLeft: 15, flex: 1, fontSize: 20, color: 'white', alignSelf: "center",  }}>List Alarm</Text>
+				<TouchableOpacity
+				style={styles.saveBtn} onPress = {()=> console.log("reload page")}>
+					<Image source={require('./src/images/reload.png')} style={{margin: 15, width: 20, height: 20}} />
+				</TouchableOpacity>
 			</View>
 			<ListView style={styles.container}
 			dataSource={this.state.dataSource}
@@ -191,7 +191,6 @@ export default class ListAlarm extends Component {
 	const styles = StyleSheet.create({
 		container: {
 			padding: 10,
-			paddingTop: 65,
 			flex: 1
 		},
 		row: {
@@ -204,7 +203,6 @@ export default class ListAlarm extends Component {
 			flexDirection: 'row',
 			backgroundColor: "#ff5722",
 			alignSelf: 'flex-start',
-			position: 'absolute',
 			right: 0,
 			top: 0,
 		},
