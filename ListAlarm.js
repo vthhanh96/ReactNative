@@ -86,6 +86,7 @@ export default class ListAlarm extends Component {
 
 	refresh = () => {
 		this.loadAllAlarm();
+		console.log(this.props.navigation.state);
 	}
 
 	render() {
@@ -95,7 +96,7 @@ export default class ListAlarm extends Component {
 			<View style={styles.statusBar}>
 				<Text style = {{paddingLeft: 15, flex: 1, fontSize: 20, color: 'white', alignSelf: "center",  }}>List Alarm</Text>
 				<TouchableOpacity
-				style={styles.saveBtn} onPress = {()=> console.log("reload page")}>
+				style={styles.saveBtn} onPress = {this.refresh}>
 					<Image source={require('./src/images/reload.png')} style={{margin: 15, width: 20, height: 20}} />
 				</TouchableOpacity>
 			</View>

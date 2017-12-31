@@ -31,6 +31,7 @@ class EditAlarm extends Component {
 			},
 			min: params.alarm.minDisToAlarm,
 			name: params.alarm.alarmname,
+			ringtone: params.alarm.ringtone,
 		}
 	}
 
@@ -49,7 +50,7 @@ class EditAlarm extends Component {
 			latitude: this.state.alarm.latitude,
 			longitude: this.state.alarm.longitude,
 			minDisToAlarm: this.state.min,
-			ringtone: this.state.alarm.ringtone,
+			ringtone: this.state.ringtone,
 			enable: this.state.alarm.enable,
 		}
 
@@ -66,7 +67,7 @@ class EditAlarm extends Component {
 		return(
 			<View style={{flex: 1, position: "relative"}}>
 				<View style={styles.statusBar}>
-				<TouchableOpacity onPress = {()=> console.log("pressed")}>
+				<TouchableOpacity onPress = {() => this.props.navigation.goBack()}>
 					<Image source={require('./src/images/back_icon.png')} style={{margin: 15, width: 20, height: 20}} />
 				</TouchableOpacity>
 					<Text style = {{paddingLeft: 20,alignSelf: 'center', flex: 1, fontSize: 20, color: 'white'}}>Edit Alarm</Text>

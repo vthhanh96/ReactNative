@@ -117,18 +117,18 @@ export default class Map extends Component<{}> {
         longitudeDelta: LONGITUDE_DELTA
       }
 
-      this.setState({markerCurrentPosition: lastRegion})
+      this.setState({markerCurrentPosition: lastRegion});
       if(!this.state.isGotPossition){
         this.setState({initialPosition : lastRegion})
         this.setState({isGotPossition: true})
       }
 
   //Check alarm
-  this.checkAlarm();
-  },
-  (error) => console.log(error.message),
-  {enableHighAccuracy: Platform.OS != 'android', timeout: 2000, distanceFilter: 1},
-  );
+  this.loadAllAlarm().then(this.checkAlarm());
+},
+(error) => console.log(error.message),
+{enableHighAccuracy: Platform.OS != 'android', timeout: 2000, distanceFilter: 1},
+);
   }
 
   componentWillUnmount() {
@@ -150,26 +150,37 @@ export default class Map extends Component<{}> {
     if(distance < this.state.alarmList[i].minDisToAlarm)
     {
       console.log("push notification for alarm " + i);
-      this.onAlarm();
+      this.onAlarm(this.state.alarmList[i]);
+      this.disableAlarm(this.state.alarmList[i]);
     }
   }
-  }
+}
 
 
-onAlarm=()=> {
+onAlarm=(alarm)=> {
   {
     //TODO: schedule background notification
     PushNotification.localNotificationSchedule({
       date: new Date(Date.now()),
-      title: "Báo thức 1", // (optional, for iOS this is only used in apple watch, the title will be the app name on other iOS devices)
-      message: "Đã đến nơi ahiahi", // (required)
-      soundName: 'in_my_heart.mp3', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
+      title: alarm.alarmname, // (optional, for iOS this is only used in apple watch, the title will be the app name on other iOS devices)
+      message: "You are going to reach " + alarm.address, // (required)
+      soundName: alarm.ringtone, // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
     });
   }
 }
 
-loadAllAlarm(){
-  AsyncStorage.getAllKeys()
+disableAlarm = (alarm) => {
+  alarm.enable = false;
+  this.updateData(alarm.key, alarm);
+}
+
+async updateData(keyAlarm, alarmObj)
+{
+  await AsyncStorage.mergeItem(keyAlarm, JSON.stringify(alarmObj));
+}
+
+async loadAllAlarm(){
+  await AsyncStorage.getAllKeys()
   .then(keys => {
     this.getAllData(keys);
   });
@@ -221,19 +232,18 @@ goToSetAlarmScreen = () => {
     ToastAndroid.show('You have to choose a desination.', ToastAndroid.SHORT);
   } else {
     navigate('SetAlarm', 
-      {
-        latitude: latitude,
-        longitude: longitude, 
-        name: name, 
-        distance: geolib.getDistance(this.state.markerCurrentPosition, this.state.markerDestination),
-        onGoBack: () => this.refresh()
-      });
+    {
+      latitude: latitude,
+      longitude: longitude, 
+      name: name, 
+      distance: geolib.getDistance(this.state.markerCurrentPosition, this.state.markerDestination),
+      onGoBack: () => this.refresh()
+    });
   }   
 }
 
 refresh = () => {
   this.loadAllAlarm();
-  console.log('refresh');
 }
 
 onMapClick = (data) => {

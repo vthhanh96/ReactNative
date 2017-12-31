@@ -78,7 +78,7 @@ class SetAlarm extends Component {
 
 			<View style={{flex: 1, position: "relative"}}>
 				<View style={styles.statusBar}>
-					<TouchableOpacity onPress = {()=> console.log("pressed")}>
+					<TouchableOpacity onPress = {() => this.props.navigation.goBack()}>
 						<Image source={require('./src/images/back_icon.png')} style={{margin: 15, width: 20, height: 20}} />
 					</TouchableOpacity>
 					<Text style = {{paddingLeft: 0,alignSelf: 'center', flex: 1, fontSize: 20, color: 'white'}}>Add Alarm</Text>
