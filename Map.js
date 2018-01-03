@@ -49,9 +49,9 @@ export default class Map extends Component<{}> {
         longitude: 0
       },
       markerDestination: {
-        latitude: 0,
-        longitude: 0,
-        name: '',
+        latitude: 14.058324,
+        longitude: 108.277199,
+        name: 'Viet Nam',
       },
       isGotPossition: false,
       alarmList: [],
@@ -296,13 +296,13 @@ render() {
     </TouchableOpacity>
     </View>
 
-    <TouchableHighlight style={[styles.button, {bottom:20}]}
+    <TouchableHighlight style={[styles.button, {bottom:70}]}
     underlayColor='#ff7043' 
     onPress={() => this.goToSetAlarmScreen()}>
     <Image source={require('./src/images/addBtn.png')} style={styles.imgBtn} />
     </TouchableHighlight>
 
-    <TouchableOpacity style={[styles.button, {bottom:80}]} 
+    <TouchableOpacity style={[styles.button, {top:70}]} 
     onPress={()=>{
       this.setState({initialPosition: this.state.markerCurrentPosition})
     }}>
