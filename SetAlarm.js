@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import {
-	Text, 
-	Image, 
-	View, 
-	StyleSheet, 
-	Button, 
-	StatusBar, 
-	TextInput, 
-	TouchableOpacity, 
-	AsyncStorage, 
+	Text,
+	Image,
+	View,
+	StyleSheet,
+	Button,
+	StatusBar,
+	TextInput,
+	TouchableOpacity,
+	AsyncStorage,
 	Slider,
 	Picker
 } from 'react-native';
@@ -114,8 +114,8 @@ class SetAlarm extends Component {
 					<Slider
 						style={{ width: 320, marginLeft: 20}}
 						step={1}
-						thumbTintColor = {"#e23600"}
-						minimumTrackTintColor = {"#ffaf96"}
+						thumbTintColor = {"#ff5722"}
+						minimumTrackTintColor = {"#ff5722"}
 						minimumValue={100}
 						maximumValue={1000}
 						value={this.state.min}

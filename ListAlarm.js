@@ -1,16 +1,18 @@
 import React, {Component} from 'react';
 import {
-	Text, 
-	View, 
-	Image, 
-	AsyncStorage, 
-	StyleSheet, 
-	ListView, 
-	TouchableOpacity, 
+	Text,
+	View,
+	Image,
+	AsyncStorage,
+	StyleSheet,
+	ListView,
+	TouchableOpacity,
 	Alert,
 	Switch,
 	ToastAndroid,
+	Platform,
 } from 'react-native';
+import Map from './Map'
 
 export default class ListAlarm extends Component {
 
@@ -28,13 +30,53 @@ export default class ListAlarm extends Component {
 
 			//src & SwitchValue phải để trong dataSource để mỗi row có giá trị khác nhau
 			src: require('./src/images/bell.png'),
-			SwitchValue: true
+			SwitchValue: true,
+			markerCurrentPosition: {
+        latitude: 0,
+        longitude: 0
+      },
 		}
 	}
 
 	componentDidMount()
 	{
 		this.loadAllAlarm();
+
+		navigator.geolocation.getCurrentPosition(
+     (position) => {
+      var lat = parseFloat(position.coords.latitude)
+      var long = parseFloat(position.coords.longitude)
+
+      var initalRegion = {
+        latitude: lat,
+        longitude: long
+      }
+
+      this.setState({markerCurrentPosition: initalRegion});
+   },
+   (error) => console.log(error.message),
+   { enableHighAccuracy: Platform.OS != 'android', timeout: 2000 },
+   );
+
+		this.watchId = navigator.geolocation.watchPosition(
+		 (position) => {
+			var lat = parseFloat(position.coords.latitude)
+			var long = parseFloat(position.coords.longitude)
+
+			var lastRegion = {
+				latitude: lat,
+				longitude: long,
+			}
+
+			this.setState({markerCurrentPosition: lastRegion});
+	},
+	(error) => console.log(error.message),
+		{enableHighAccuracy: Platform.OS != 'android', timeout: 2000, distanceFilter: 1},
+	);
+	}
+
+	componentWillUnmount() {
+		navigator.geolocation.clearWatch(this.watchId);
 	}
 
 	static navigationOptions = {
@@ -58,7 +100,7 @@ export default class ListAlarm extends Component {
 			{text: 'Cancel', onPress: () => console.log('cancel')},
 			{text: 'OK', onPress: () => this.deleteAlarm(key)},
 			],
-			{cancelable: false} 
+			{cancelable: false}
 			);
 	}
 
@@ -106,7 +148,7 @@ export default class ListAlarm extends Component {
 			renderRow={(rowData) => {
 				return (
 				<TouchableOpacity
-				onPress={() => navigate('EditAlarm', {alarm: rowData, onGoBack: () => this.refresh()})}
+				onPress={() => navigate('EditAlarm', {alarm: rowData, currentPosition: this.state.markerCurrentPosition, onGoBack: () => this.refresh()})}
 				onLongPress={() => this.confirmDeleteAlarm(rowData.key)}>
 				<View style={styles.row}>
 				{rowData.enable
@@ -117,7 +159,7 @@ export default class ListAlarm extends Component {
 				<Text style={{fontSize: 17, fontWeight: 'bold'}}>{rowData.alarmname}</Text>
 				<Text>Địa chỉ: {rowData.address}</Text>
 				</View>
-				<Switch 
+				<Switch
 				onValueChange={(value) => {
 					this.onSwitchRow(rowData, value);
 				}}

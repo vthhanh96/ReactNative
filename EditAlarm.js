@@ -1,18 +1,19 @@
 import React, {Component} from 'react';
 import {
-	Text, 
-	Image, 
-	View, 
-	StyleSheet, 
-	Button, 
-	StatusBar, 
-	TextInput, 
-	TouchableOpacity, 
-	AsyncStorage, 
+	Text,
+	Image,
+	View,
+	StyleSheet,
+	Button,
+	StatusBar,
+	TextInput,
+	TouchableOpacity,
+	AsyncStorage,
 	Slider,
 	Picker
 } from 'react-native';
 import {StackNavigator} from 'react-navigation';
+import geolib from 'geolib';
 
 class EditAlarm extends Component {
 	constructor(props) {
@@ -29,6 +30,7 @@ class EditAlarm extends Component {
 				ringtone: params.alarm.ringtone,
 				enable: params.alarm.enable,
 			},
+			distance: geolib.getDistance(params.currentPosition, params.alarm),
 			min: params.alarm.minDisToAlarm,
 			name: params.alarm.alarmname,
 			ringtone: params.alarm.ringtone,
@@ -95,7 +97,7 @@ class EditAlarm extends Component {
 
 				<View style={styles.propertiseBox}>
 			<Text style = {styles.propertiseTitle}>Distance</Text>
-					<Text style = {{paddingLeft: 25}}>1000m</Text>
+					<Text style = {{paddingLeft: 25}}>{this.state.distance + "m"}</Text>
 				</View>
 
 				<View style={styles.propertiseBox}>

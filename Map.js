@@ -231,15 +231,15 @@ goToSetAlarmScreen = () => {
   if(latitude === 0 && longitude === 0) {
     ToastAndroid.show('You have to choose a desination.', ToastAndroid.SHORT);
   } else {
-    navigate('SetAlarm', 
+    navigate('SetAlarm',
     {
       latitude: latitude,
-      longitude: longitude, 
-      name: name, 
+      longitude: longitude,
+      name: name,
       distance: geolib.getDistance(this.state.markerCurrentPosition, this.state.markerDestination),
       onGoBack: () => this.refresh()
     });
-  }   
+  }
 }
 
 refresh = () => {
@@ -249,7 +249,7 @@ refresh = () => {
 onMapClick = (data) => {
   var latitude = data.coordinate.latitude;
   var longitude = data.coordinate.longitude;
-  
+
   getAddress.getAddress(data.coordinate.latitude, data.coordinate.longitude).then((data) => {
     if(data === '')
       data = 'Unknown Location';
@@ -264,7 +264,6 @@ render() {
   const {navigate} = this.props.navigation;
   return (
     <View style ={styles.container}>
-
     <MapView
     style={styles.map}
     region={this.state.initialPosition}
@@ -287,7 +286,7 @@ render() {
     </MapView>
 
     <View style={styles.searchBar}>
-    
+
 
     <TouchableOpacity
     style={styles.searchBtn}
@@ -296,13 +295,13 @@ render() {
     </TouchableOpacity>
     </View>
 
-    <TouchableHighlight style={[styles.button, {bottom:70}]}
-    underlayColor='#ff7043' 
+    <TouchableHighlight style={[styles.button, {bottom:20}]}
+    underlayColor='#ff7043'
     onPress={() => this.goToSetAlarmScreen()}>
     <Image source={require('./src/images/addBtn.png')} style={styles.imgBtn} />
     </TouchableHighlight>
 
-    <TouchableOpacity style={[styles.button, {top:70}]} 
+    <TouchableOpacity style={[styles.button, {top:70}]}
     onPress={()=>{
       this.setState({initialPosition: this.state.markerCurrentPosition})
     }}>
